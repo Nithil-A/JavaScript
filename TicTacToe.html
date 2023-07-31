@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Tic Tac Toe</title>
+</head>
+<style>
+    body{
+        background-color: beige;
+    }
+    .main{
+        text-align: center;
+        margin-top: 50px;
+    }
+    .grid{
+        display: grid;
+        grid-template-columns: repeat(3, auto);
+        height: 300px;
+        width: 300px; 
+        margin-left: 39%;
+        background-color:white;
+    }
+</style>
+<body>
+    <div class="main">
+        <h1>Tic Tac Toe</h1>
+        <p>Player are 'O' and 'X'</p>
+        <p>Click Any box to start the game(first combination of 'X' or 'O' Winn the Game).</p>
+        <h1 id="wiinerId"></h1>
+        <div class="grid" id="grid">
+            <button id="btn0" onclick="jsChange(this)"></button>
+            <button id="btn1" onclick="jsChange(this)"></button>
+            <button id="btn2" onclick="jsChange(this)"></button>
+            <button id="btn3" onclick="jsChange(this)"></button>
+            <button id="btn4" onclick="jsChange(this)"></button>
+            <button id="btn5" onclick="jsChange(this)"></button>
+            <button id="btn6" onclick="jsChange(this)"></button>
+            <button id="btn7" onclick="jsChange(this)"></button>
+            <button id="btn8" onclick="jsChange(this)"></button>
+        </div>
+        <button id="btnReset" onclick = "window.location.reload()">Reset</button>
+    </div>
+</body>
+<script>
+    let count = 0;
+    let play = 0;
+    // winning combinations
+    let winning = [
+        //row combinations
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        // column combinations
+        [0, 3, 6],
+        [1, 4 ,7],
+        [2, 5, 8],
+        // diagonal combinations
+        [0, 4, 8],
+        [6, 4, 2]
+    ];
+    // starting function for game play
+    function jsChange(x){
+        let val = x;
+        if(count % 2 == 1){ // odd or even function execution
+            val.innerText = 'O';
+            val.style.fontSize = 'x-large';
+            val.style.color = 'Green';
+            val.disabled = true;
+        }else{
+            val.innerText = 'X';
+            val.style.fontSize = 'x-large';
+            val.style.color = 'red';
+            val.disabled = true;
+        }
+        // looping winning combinatioins and checking the condition
+        winning.forEach((item) =>{
+            let first = document.getElementById('btn' + item[0]).innerText;
+            let second = document.getElementById('btn' + item[1]).innerText;
+            let third = document.getElementById('btn' + item[2]).innerText;
+            if(first != '' && second != '' && third != ''){ // if the value is not empty
+                if(first == second){    // if the first and seconds are equal
+                    if(second == third){    // if the second and third are equal
+                        let winn = document.getElementById('wiinerId');
+                        winn.innerText = `Congratulations Player '${val.innerText}' Winns`;
+                        winn.fontSize = 'xx-large';
+                        winn.style.color = '#2ac421';
+                        document.getElementById('grid').style.pointerEvents = 'none';
+                        play = 1;
+                        // return false;
+                    }
+                }
+            }
+        })
+        count ++;   // incrementing function execution count
+        if(count == 9 && play == 0){    // match tie
+            alert("Tie");
+        }     
+    }
+</script>
+</html>

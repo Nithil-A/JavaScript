@@ -1,0 +1,111 @@
+<html>
+	<head>
+		<title>ToDo list</title>
+		<style>
+			.strikethrough{
+				text-decoration: line-through;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>ToDo List</h1>
+		<form id="frmTodo" name="frmTodo">
+			  <input type="text" id="myInput" placeholder="Title...">
+			  <span onclick="jsCreateNewElet()">Add</span>&nbsp;
+			  <select id="selCat" onchange="jsdisplay(this.value)">
+				<option id="All">All</option>
+				<option id="Unfinished">Unfinished</option>
+				<option id="Completed">Completed</option>
+			  </select>
+		</form>
+		
+		<ul id="TodoUl"></ul> 
+		<script>
+			// To display by category 
+			function jsdisplay(value){
+				let ulId = document.getElementById("TodoUl");
+				let OptValue = ulId.childNodes;
+				OptValue.forEach(function(opt){
+					switch(value){
+					case "Completed" :
+							if(opt.className != 'strikethrough'){
+								opt.style.display = "none";
+							}
+							else{
+								opt.style.display = "";
+							}
+						break;
+					case "All" : 
+							opt.style.display = "";
+						break;
+						
+					case "Unfinished":
+						if(opt.className == 'strikethrough'){
+							opt.style.display = "none";
+						}
+						else{
+							opt.style.display = "";
+						}
+						break;
+					}
+				})
+			}
+			
+			// Creating New Todo list
+			function jsCreateNewElet(){
+				let newLi = document.createElement("li");
+				let Inputvalue = document.getElementById("myInput").value;
+				let text = document.createTextNode(Inputvalue);
+				newLi.appendChild(text);
+				if(Inputvalue ==''){
+					alert("Enter Any Value");
+					return false;
+				}
+				else{
+					document.getElementById("TodoUl").appendChild(newLi);
+				}
+				document.getElementById("frmTodo").reset();
+				
+				// adding delete btn
+				let trash = document.createElement("button");
+				let trashText = document.createTextNode("X");
+				trash.className= "close";
+				trash.appendChild(trashText);
+				newLi.appendChild(trash);
+				
+				// adding close function
+				let cls = document.getElementsByClassName("close");
+				for (let i = 0; i < cls.length; i++) {
+					cls[i].onclick = function() {
+					  let liEle = this.parentElement;
+					  liEle.remove();
+					}
+				}
+				
+				// adding complete mark;
+				let tickMark = document.createElement("button");
+				let tickText = document.createTextNode("#");
+				tickMark.className = "tick";
+				tickMark.appendChild(tickText);
+				newLi.appendChild(tickMark);
+				
+				// completed todo;
+				let tdlist = document.getElementsByClassName("tick");
+				for(let i = 0; i< tdlist.length; i++){
+					tdlist[i].onclick = function(){
+						var tdli = this.parentElement;
+						
+						if(tdli.className =="strikethrough"){
+							tdli.className = "none";
+						}
+						else{
+						tdli.className = "strikethrough";
+						}
+					}
+				}
+			
+			}
+			
+		</script>
+	</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Rock Paper Scissor</title>
+</head>
+<style>
+    .main{
+        text-align: center;
+        margin-left: 200px;
+        margin-right: 200px;
+        background-color: palegoldenrod;
+        margin-top: 10%;
+    }
+    body{
+        background-color: slategray;
+    }
+</style>
+<body>
+    <div class="main">
+        <h1>Rock Paper Scissor</h1>
+        <div class="gameConsole">
+            <div class="computer">
+                <h2>Computer</h2>
+                <h3 class="computerScor">Score : </h3>
+                <p class="compMoves">Moves</p>
+            </div>
+            <hr>
+            <div class="player">
+                <h2>Player</h2>
+                <h3 class="playerScor">Scores</h3>
+                <button class="rockBtn">Rock</button>
+                <button class="paperBtn">Paper</button>
+                <button class="scissorBtn">Scissor</button>
+            </div>
+        </div><br>
+        <p class="totalMoves">Total Moves 10</p>
+        <button onclick="window.location.reload()">Reset</button>
+        <div class="resultWindow">
+            <h1 class="result"></h2>
+        </div>
+    </div>
+</body>
+<script>
+    let playerScores = 0;
+    let computerScores = 0;
+    let totalMovesLeft = 0;
+    // Game Starting
+    const jsGameConsole = ()=>{
+            const rockBtn = document.querySelector('.rockBtn');
+            const paperBtn = document.querySelector('.paperBtn');
+            const scissorBtn = document.querySelector('.scissorBtn');
+            const playerChoice = [rockBtn, paperBtn, scissorBtn];
+            const computerChoice = ['Rock', 'Paper', 'Scissor'];
+            //Select player options
+            playerChoice.forEach(option =>{
+                option.addEventListener('click', function(){
+                    totalMovesLeft++;   //incrementing Moves
+                    const moves = document.querySelector('.totalMoves');
+                    moves.innerHTML = `Total Moves left ${10 - totalMovesLeft}`;    //to show the moves left
+                    const computerChoiceNumber = Math.floor(Math.random()*3);   //get random number between 0 to 3
+                    const computerOption = computerChoice[computerChoiceNumber];    // get computerChoice in random order
+                    const playerval = this.innerHTML;   // currenty clicked value
+                    const result = document.querySelector('.result');
+                    const compScor = document.querySelector('.computerScor');
+                    const userScor = document.querySelector('.playerScor');
+                    const compMoves = document.querySelector('.compMoves');
+                    compMoves.innerHTML = `Option :- ${computerOption}`;
+                    // checking the winning condition and incrementing Scores
+                    if(playerval == computerOption){    //if both are equal, tie
+                        result.innerHTML = "Tie";
+                        result.style.color = 'Blue';
+                    }
+                    else if(playerval == 'Rock'){  
+                        if(computerOption == 'Paper'){
+                            computerScores ++;
+                            result.innerHTML = "Computer Won ";
+                            compScor.innerHTML = computerScores;
+                            result.style.color = 'red';
+                        }else{
+                            playerScores ++;
+                            result.innerHTML = "Player Won";
+                            userScor.innerHTML = playerScores;
+                            result.style.color = 'Green';
+                        }
+                    }
+                    else if(playerval == 'Paper'){
+                        if(computerOption == 'Scissor'){
+                            computerScores ++;
+                            result.innerHTML = "Computer Won ";
+                            compScor.innerHTML = computerScores;
+                            result.style.color = 'red';
+                        }else{
+                            playerScores ++;
+                            result.innerHTML = "Player Won";
+                            userScor.innerHTML = playerScores;
+                            result.style.color = 'Green';
+                        }
+                    }
+                    else if(playerval == 'Scissor'){
+                        if(computerOption == 'Rock'){
+                            computerScores ++;
+                            result.innerHTML = "Computer Won ";
+                            compScor.innerHTML = computerScores;
+                            result.style.color = 'red';
+                        }else{
+                            playerScores ++;
+                            result.innerHTML = "Player Won";
+                            userScor.innerHTML = playerScores;
+                            result.style.color = 'Green';
+                        }
+                    }
+                    // if total moves exceeded, game over
+                    if(totalMovesLeft == 10){
+                        alert("Game Over!!!!!!!");
+                        moves.style.display = 'none';
+                        playerChoice.forEach(opt => {
+                            opt.style.display = 'none';
+                        });
+                        if(computerScores == playerScores){
+                            result.innerHTML = "Tie";
+                            result.style.color = 'blue';
+                        }
+                        else if(computerScores > playerScores){
+                            result.innerHTML = "Computer Won";
+                            result.style.color = 'red';
+                        }
+                        else{
+                            result.innerHTML = "Player Won";
+                            result.style.color = 'Green';
+                        }
+                    }
+                });
+            });
+        }   
+jsGameConsole();
+</script>
+</html>

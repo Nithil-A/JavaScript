@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Tic Tac Toe Drag And Drop</title>
+</head>
+<style>
+    body{
+        text-align: center;
+        background-color :#e0c89c;
+    }
+    .grid{
+        margin-top: 50px;
+        display: grid;
+        grid-template-columns: repeat(3, auto);
+        height: 300px;
+        width: 300px; 
+        margin-left: 39%;
+        
+        
+    }
+    .btn{
+        background-color: rgb(250, 241, 223);
+        border-color :rgb(177, 225, 245);
+    }
+    .reset{
+        margin-top: 10px;
+        font-size: larger;
+        color: crimson;
+        background-color: rgba(209, 218, 218, 0.993);
+    }
+</style>
+<body>
+    <h1 style="color : #1026e8">Tic Tac Toe</h1>
+    <p>Start the Game with Player 'X' and next Player 'O'</p>
+    <small>Only three options can add for a player to winn click a option and place it in a empty box and move each option umtill you winn</small>
+    <h2 id="winn"></h2>
+    <div class="grid" id="grid">
+        <button class="btn" id="btn0" onclick="jsMove(this)"></button>
+        <button class="btn" id="btn1" onclick="jsMove(this)"></button>
+        <button class="btn" id="btn2" onclick="jsMove(this)"></button>
+        <button class="btn" id="btn3" onclick="jsMove(this)"></button>
+        <button class="btn" id="btn4" onclick="jsMove(this)"></button>
+        <button class="btn" id="btn5" onclick="jsMove(this)"></button>
+        <button class="btn" id="btn6" onclick="jsMove(this)"></button>
+        <button class="btn" id="btn7" onclick="jsMove(this)"></button>
+        <button class="btn" id="btn8" onclick="jsMove(this)"></button>
+    </div>
+    <div>
+        <button class="reset" onclick="window.location.reload()">Reset</button>
+    </div>
+</body>
+<script>
+    let count = 0;
+    let temp = '';
+    // game winning combinations and checking winning conditions
+    function jsWinningFunction(){
+        let winning = [
+                //row combinations
+                [0, 1, 2],
+                [3, 4, 5],
+                [6, 7, 8],
+                // column combinations
+                [0, 3, 6],
+                [1, 4 ,7],
+                [2, 5, 8],
+                // diagonal combinations
+                [0, 4, 8],
+                [6, 4, 2]
+            ];
+            winning.forEach((item) =>{
+                let first = document.getElementById('btn' + item[0]).innerText;
+                let second = document.getElementById('btn' + item[1]).innerText;
+                let third = document.getElementById('btn' + item[2]).innerText;
+                if(first != '' && second != '' && third != ''){ // if the value is not empty
+                    if(first == second){    // if the first and seconds are equal
+                        if(second == third){    // if the second and third are equal
+                            let winn = document.getElementById('winn');
+                            winn.innerHTML = `Congratulations Player '${first}' Won the Game`;
+                            winn.style.color = 'red';
+                            document.getElementById('grid').style.pointerEvents = 'none';
+                        }
+                    }
+                }
+            });
+    }
+    //option adding and movement checking
+    function jsMove(val){
+        let lastPickedVal = 'O';
+        let clickedValue = val;
+        if(count % 2 == 1 && count < 6){
+            clickedValue.innerHTML = 'O';
+            clickedValue.style.color = '#42c142';
+            clickedValue.style.fontSize = 'xx-large';
+            clickedValue.disabled = true;   
+        }
+        else if(count < 6){
+            clickedValue.innerHTML = 'X';
+            clickedValue.style.color = 'red';
+            clickedValue.style.fontSize = 'xx-large';
+            clickedValue.disabled = true;  
+        }
+        if(count == 5){
+            let grid = document.querySelectorAll('.btn');
+            let winn = document.getElementById('winn');
+            grid.forEach(item => {
+                item.disabled = false;
+                    item.addEventListener('click', (e)=>{
+                        if(item.innerHTML != "" && temp == "" && lastPickedVal != item.innerHTML){
+                            temp = item.innerHTML;
+                            tempNode = e.target;
+                            item.innerHTML = '';   
+                        }
+                        else if(item.innerHTML == "" && temp != ''){
+                            // option moveable combinations for each option x or o
+                            let movableCombinations = [
+                                    ['1', '3', '4'],
+                                    ['0', '2', '4'],
+                                    ['1', '5', '4'],
+                                    ['0', '6', '4'],
+                                    ['0', '1', '2', '3', '5', '6', '7','8'],
+                                    ['2', '8', '4'],
+                                    ['3', '7', '4'],
+                                    ['6', '8', '4'],
+                                    ['7', '4', '5']
+                            ];
+                            moveIndex = tempNode.id.substr(-1)
+                            possibleArray = movableCombinations[moveIndex];
+                            currentNode = e.target.id.substr(-1);
+                            //checking the possible combination to move
+                            if(possibleArray.indexOf(currentNode) != -1){
+                                if(temp == 'X'){
+                                    item.innerHTML = 'X';
+                                    item.style.color = 'red';
+                                    item.style.fontSize = 'xx-large';
+                                }
+                                else{
+                                    item.innerHTML = 'O';
+                                    item.style.color = '#42c142';
+                                    item.style.fontSize = 'xx-large';
+                                }
+                                winn.innerHTML = `Nice Move Player '${item.innerHTML}' `;
+                                winn.style.color = '#c50e0ee0';
+                                winn.style.fontSize = 'x-large';
+                                lastPickedVal = temp;
+                                temp = "";
+                            }
+                            else{
+                                tempNode.innerHTML = temp;
+                                winn.innerHTML = `This not a valid Move Player '${temp}'`;
+                                temp = "";
+                                tempNode = "";
+                                winn.style.color = '#6f8d72';
+                                winn.style.fontSize = 'x-large';
+                            }
+                        }
+                        else if(item.innerHTML != "" && temp != ''){
+                                tempNode.innerHTML = temp;
+                                winn.innerHTML = `This Position is alredy Filled'`;
+                                winn.style.color = '#6f8d72';
+                                winn.style.fontSize = 'x-large'; 
+                                temp = "";
+                                tempNode = "";  
+                        }
+                        else{
+                            alert("Invalid Selection or Move");
+                        }
+                        jsWinningFunction();
+                    }); 
+            }); 
+        }
+        jsWinningFunction();
+        count ++;
+    }
+</script>
+</html>
